@@ -1,23 +1,27 @@
 # CMake RE
-Use the following branch `feature/support-cmake-re` in the tipi team fork from this project
+Use the default branch `feature/support-cmake-re` in the tipi team fork from this project
 
 ```bash 
-git clone https://github.com/tipi-build/ParaView && cd ParaView
-git checkout feature/support-cmake-re
-git submodule init
-git submodule update
+git clone https://github.com/tipi-build/ParaView.git --recursive && cd ParaView
 ```
 
 The same branch and fork are also available for `vtk`. All of the following examples apply to both `vtk` and `ParaView`; only the project name changes. 
 
 ## Download your CMake RE authentication certificate
 
-1) Head to the [Engflow UI](https://kernite.cluster.engflow.com):
-  - From the Getting Started Page click on Generate and Download mTLS Certificate 
-2) This will download a file named engflow-mTLS.zip
-3) Unpack it in your $HOME/engflow-mTLS. It will be containing:
-  - engflow.crt, 
+1) Head to your Cluster `Kernite` [Engflow UI](https://kernite.cluster.engflow.com):
+  - You will need a Google Account for your Kitware Email (you can create one with : https://support.google.com/accounts/answer/27441?hl=en&co=GENIE.Platform%3DDesktop#existingemail)
+  - From the [Getting Started](https://kernite.cluster.engflow.com/gettingstarted) Page click on *Generate and Download mTLS Certificate (Bazel)*
+2) This will download a file named `engflow-mTLS.zip`
+3) Unpack it in your `${HOME}/engflow-mTLS`. It will contain: 
+  - engflow.crt
   - engflow.key (never share the private .key file)
+
+
+## Choosing the type of builds
+CMake RE can run containerized or host builds in distributed and cached fashion.
+
+Currently the most solid mode is `--host --distributed` run from within a containers started manually.
 
 ## Setup a ready-made container (example commands to copy/paste)
 
@@ -40,12 +44,9 @@ docker exec -it `whoami`-linux-kitware-paraview-mini /bin/bash
 Inside the container :
 
 ```bash
-export RBE_service="kernite.cluster.engflow.com:443"
+export RBE_service=kernite.cluster.engflow.com:443
 export RBE_tls_client_auth_key=${HOME}/engflow-mTLS/engflow.key
 export RBE_tls_client_auth_cert=${HOME}/engflow-mTLS/engflow.crt
-export RBE_local_resource_fraction="0.3"
-export RBE_exec_strategy="racing"
-export RBE_racing_bias="5"
 
 cmake-re -S . -B ./build-mini -DCMAKE_TOOLCHAIN_FILE=toolchains/environments/linux-kitware-paraview-mini.cmake --host --distributed 
 cmake-re --build ./build-mini --host --distributed -j500
@@ -62,7 +63,7 @@ There are several toolchains representing the different presets
 
 ## Remote Execution Profile
 
-Make RE prints an `Invocation ID: uuid-uuid-uuid-uuid-uuid`, that can be used to explore builds performance and cacheability with [Perfetto](https://ui.perfetto.dev) or similar chrome-tracing compatible tools.
+CMake RE prints an `Invocation ID: uuid-uuid-uuid-uuid-uuid`, that can be used to explore builds performance and cacheability with [Perfetto](https://ui.perfetto.dev) or similar chrome-tracing compatible tools.
 It's also possible to force it to a user-defined value by setting before the build: `export RBE_invocation_id=$(uuidgen)`
 
 Then it's possible to download the profile as follow :
