@@ -26,14 +26,14 @@ Currently the most solid mode is `--host --distributed` run from within a contai
 ## Setup a ready-made container (example commands to copy/paste)
 
 ```bash 
-mkdir -p ../`whoami`linux-kitware-paraview-mini-vT.w
+mkdir -p ../`whoami`-linux-kitware-paraview-mini-vT.w
 mkdir -p ../generalized-toolchains
 docker run --rm --init --detach --name `whoami`-linux-kitware-paraview-mini \
 -u`id -u`:`id -g` --group-add tipi \
 -e TIPI_DISABLE_AR_RANLIB_DRIVER=ON -e TIPI_CACHE_CONSUME_ONLY=ON -e TIPI_CACHE_FORCE_ENABLE=OFF -e HOME \
 -v $HOME:$HOME:rw \
 -v $PWD:$PWD:rw -w $PWD \
---mount type=bind,source=$PWD/../`whoami`linux-kitware-paraview-mini-vT.w,target=/usr/local/share/.tipi/vT.w/ \
+--mount type=bind,source=$PWD/../`whoami`-linux-kitware-paraview-mini-vT.w,target=/usr/local/share/.tipi/vT.w/ \
 --mount type=bind,source=$PWD/../generalized-toolchains,target=/usr/local/share/.tipi/environments/generalized/v1/ \
 tipibuild/linux-kitware-paraview@sha256:e0417824c4d417eb4d363f08954d11b94f9e6eb4ec76cee391db72e1e281fb18 \
 sleep infinity
