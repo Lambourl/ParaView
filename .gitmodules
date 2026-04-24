@@ -12,3 +12,6 @@
 [submodule "ThirdParty/QtTesting/vtkqttesting"]
 	path = ThirdParty/QtTesting/vtkqttesting
 	url = https://gitlab.kitware.com/paraview/qttesting.git
+[submodule "toolchains/environments"]
+	path = toolchains/environments
+	url = https://github.com/tipi-build/environments.git
